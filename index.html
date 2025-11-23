@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Сварка Авто Витебск | Кузовной Ремонт</title>
+    <style>
+        /* --- 1. НАСТРОЙКИ И ПЕРЕМЕННЫЕ --- */
+        :root {
+            --bg-color: #0b0d11; /* Чуть более глубокий черный для контраста */
+            --card-bg: #15181e;
+            --primary: #ff9d00; /* Оранжевая искра */
+            --primary-dark: #e68a00;
+            --primary-glow: rgba(255, 157, 0, 0.5);
+            --text-main: #ffffff;
+            /* Был темный серый, стал светлый серебристый для лучшей читаемости */
+            --text-muted: #d1d5db; 
+            --font-main: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --radius: 8px;
+            --header-height: 70px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- 2. УТИЛИТЫ --- */
+        .container {
+            width: 100%;
+            max-width: 1400px; /* Расширили контейнер для больших экранов */
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 18px 36px;
+            background: var(--primary);
+            color: #000;
+            border-radius: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 25px var(--primary-glow);
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #ffb300;
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px var(--primary-glow);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 900;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+        }
+
+        /* --- 3. АДАПТИВНАЯ ШАПКА --- */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: var(--header-height);
+            background: rgba(11, 13, 17, 0.95); /* Почти непрозрачный фон для читаемости */
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-main span { color: var(--primary); }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        .nav-link:hover { color: #fff; }
+
+        /* Кнопка телефона в шапке */
+        .phone-btn-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800; /* Жирнее */
+            font-size: 1rem;
+            color: #fff; /* Чистый белый */
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            white-space: nowrap;
+        }
+
+        .phone-btn-header:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Адаптив шапки */
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .logo-main { font-size: 1.1rem; }
+            .phone-btn-header {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            .phone-btn-header span { display: block; } /* Номер виден */
+        }
+
+        /* --- 4. ГЛАВНЫЙ ЭКРАН (HERO) --- */
+        .hero {
+            min-height: 100vh;
+            padding-top: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Фон сетка + виньетка */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(255,157,0,0.08) 0%, transparent 70%),
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+            z-index: -1;
+        }
+
+        .hero-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* На больших экранах контент может быть шире */
+            max-width: 1600px; 
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .hero-tag {
+            font-size: 0.85rem;
+            padding: 6px 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
+            color: #fff; /* Белый вместо серого */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ЗАГОЛОВОК: Разгоняем ширину */
+        .hero h1 {
+            /* clamp(минимум, предпочтительно, максимум) */
+            /* 13vw позволяет шрифту расти очень сильно на широких мониторах */
+            font-size: clamp(2.8rem, 13vw, 8.5rem);
+            line-height: 0.95;
+            margin-bottom: 30px;
+            font-weight: 900;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .hero h1 span {
+            display: block;
+            /* Контурный текст для стиля */
+            -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+            color: transparent; 
+        }
+
+        /* Оранжевая заливка для слова АВТО */
+        .hero h1 .highlight {
+            color: var(--primary);
+            -webkit-text-stroke: 0;
+            text-shadow: 0 0 50px rgba(255, 157, 0, 0.4);
+        }
+        
+        /* Заливка для слова ВИТЕБСК (делаем белым) */
+        .hero h1 .solid {
+            color: #fff;
+            -webkit-text-stroke: 0;
+        }
+
+        /* Текст под заголовком - улучшенная читаемость */
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: var(--text-muted); /* Светлый серый */
+            margin-bottom: 50px;
+            max-width: 800px;
+            font-weight: 400;
+            padding: 0 15px;
+        }
+
+        /* --- 5. ПРЕИМУЩЕСТВА --- */
+        .features { padding: 80px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255,255,255,0.08); /* Чуть ярче границы */
+        }
+
+        .feature-num {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: rgba(255,255,255,0.08);
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 { margin-bottom: 10px; color: #fff; font-size: 1.3rem; }
+        
+        /* Читабельный текст в карточках */
+        .feature-card p { 
+            color: var(--text-muted); 
+            font-size: 1rem; 
+            font-weight: 400;
+        }
+
+        /* --- 6. КЕЙСЫ --- */
+        .cases { padding: 80px 0; background: #0e1014; }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .case-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .case-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .case-name { font-weight: 700; color: #fff; font-size: 1.1rem; }
+        .case-type { 
+            font-size: 0.75rem; 
+            color: var(--primary); 
+            background: rgba(255, 157, 0, 0.1);
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-weight: 700;
+        }
+
+        .case-body { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+
+        .schematic {
+            width: 100%;
+            height: 120px;
+            margin-bottom: 20px;
+            border: 2px dashed rgba(255,255,255,0.15); /* Ярче линии */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-family: monospace;
+            font-size: 0.9rem;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 12px 12px;
+            border-radius: 4px;
+        }
+
+        .case-desc {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: auto; /* Толкает итог вниз */
+            padding-bottom: 20px;
+        }
+
+        .case-result {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+        
+        .case-result span { color: #00d4ff; font-weight: 700; margin-right: 5px; }
+
+        /* --- 7. КОНТАКТЫ --- */
+        .contact { padding: 80px 0 100px; text-align: center; }
+
+        .contact-box {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid var(--primary);
+            padding: 50px 20px;
+            border-radius: 12px;
+            background: radial-gradient(circle at center, rgba(255,157,0,0.1) 0%, transparent 70%);
+        }
+
+        .big-phone {
+            /* На больших экранах очень крупно, на мелких - влезает */
+            font-size: clamp(1.8rem, 7vw, 4.5rem); 
+            font-weight: 900;
+            display: block;
+            margin: 30px 0;
+            color: #fff;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+        
+        .big-phone:hover { color: var(--primary); text-shadow: 0 0 30px var(--primary-glow); }
+        
+        .contact-text {
+            color: var(--text-muted); 
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        /* --- ПОДВАЛ --- */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.85rem;
+        }
+
+        /* --- ДОПОЛНИТЕЛЬНЫЙ АДАПТИВ --- */
+        @media (max-width: 400px) {
+            .btn { width: 100%; } /* Кнопка на всю ширину на узких телефонах */
+            .features-grid, .cases-grid { grid-template-columns: 1fr; }
+        }
+        
+        /* На очень больших экранах делаем отступы между словами в заголовке */
+        @media (min-width: 1600px) {
+            .hero h1 { letter-spacing: -2px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <div class="logo-main">WELD<span>AUTO</span></div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="#features" class="nav-link">Почему мы</a>
+                <a href="#cases" class="nav-link">Наши работы</a>
+                <a href="#contact" class="nav-link">Контакты</a>
+            </nav>
+
+            <a href="tel:+375297129119" class="phone-btn-header">
+                <span>+375 (29) 712-91-19</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-tags">
+                <span class="hero-tag">Ремонт порогов</span>
+                <span class="hero-tag">Сварка днища</span>
+                <span class="hero-tag">Антикор</span>
+            </div>
+            
+            <h1>
+                <span>СВАРКА</span>
+                <span class="highlight">АВТО</span>
+                <span class="solid">ВИТЕБСК</span>
+            </h1>
+            
+            <p>Профессиональное восстановление кузова. Сохраняем геометрию и жесткость металла. Опыт 30 лет. Гарантия на каждый шов.</p>
+            
+            <a href="#contact" class="btn">Записаться на ремонт</a>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">ПРЕИМУЩЕСТВА</h2>
+            <p class="section-subtitle">Факты о нашей работе</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-num">30</div>
+                    <h3>Лет опыта</h3>
+                    <p>Мы работаем с металлом с 90-х годов. Знаем конструктивные особенности всех марок авто.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-num">100%</div>
+                    <h3>Гарантия</h3>
+                    <p>Мы уверены в своей работе. Обрабатываем швы антикором и даем честную гарантию.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-num">PRO</div>
+                    <h3>Оборудование</h3>
+                    <p>Полуавтоматы высокого класса и споттеры для точечной сварки. Шов как заводской.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-num">BY</div>
+                    <h3>Витебск</h3>
+                    <p>Находимся в черте города. Удобный подъезд. Предварительная оценка по фото в мессенджерах.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CASES -->
+    <section id="cases" class="cases">
+        <div class="container">
+            <h2 class="section-title">ПРИМЕРЫ РАБОТ</h2>
+            <p class="section-subtitle">Кейсы и решения</p>
+
+            <div class="cases-grid">
+                <!-- Case 1 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <span class="case-name">BMW X5 (E53)</span>
+                        <span class="case-type">ПОРОГИ</span>
+                    </div>
+                    <div class="case-body">
+                        <div class="schematic">/// СХЕМА УСИЛЕНИЯ ///</div>
+                        <div class="case-desc">Полная замена внешних порогов. Восстановление внутренних усилителей и поддомкратников. Обработка скрытых полостей.</div>
+                        <div class="case-result"><span>ИТОГ:</span> Восстановлена заводская жесткость.</div>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <span class="case-name">AUDI A6 C5</span>
+                        <span class="case-type">ДНИЩЕ</span>
+                    </div>
+                    <div class="case-body">
+                        <div class="schematic">/// ЛОКАЛЬНАЯ СВАРКА ///</div>
+                        <div class="case-desc">Устранение очагов коррозии в ногах водителя и пассажира. Изготовление латок из стали 1.2мм по форме пола.</div>
+                        <div class="case-result"><span>ИТОГ:</span> Полная герметичность салона.</div>
+                    </div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <span class="case-name">VW PASSAT</span>
+                        <span class="case-type">ВЫХЛОП</span>
+                    </div>
+                    <div class="case-body">
+                        <div class="schematic">/// ЗАМЕНА ГОФРЫ ///</div>
+                        <div class="case-desc">Ремонт выхлопной системы. Срезка старой гофры, вварка новой трехслойной гофры interlock. Ремонт креплений.</div>
+                        <div class="case-result"><span>ИТОГ:</span> Тихая работа двигателя.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-box">
+                <h2 class="section-title">НУЖНА СВАРКА?</h2>
+                <p class="contact-text">Звоните сейчас. Консультация бесплатная.</p>
+                
+                <a href="tel:+375297129119" class="big-phone">+375 (29) 712-91-19</a>
+                
+                <a href="tel:+375297129119" class="btn">Позвонить мастеру</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Weld Auto Vitebsk. Кузовной ремонт и сварка.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Плавный скролл для ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
